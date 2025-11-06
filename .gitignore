@@ -53,8 +53,10 @@ out/
 .azure-pipelines.yml
 *.azuredevops
 
-# Github
-.github/
+# Github - allow workflows but ignore other .github files
+.github/*
+!.github/workflows/
+!.github/workflows/**
 
 # Other
 NOTES.md

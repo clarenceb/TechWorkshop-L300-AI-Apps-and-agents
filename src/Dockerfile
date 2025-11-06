@@ -21,7 +21,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the code
 COPY . .
 
-# Copy .env file into the image (for python-dotenv)
+# Copy .env file into the image (created during build from GitHub secret)
+# Note: .env file is created in the build context by GitHub Actions
 COPY .env .env
 
 # Expose the port (default FastAPI/uvicorn port)
