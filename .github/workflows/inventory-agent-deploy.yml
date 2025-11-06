@@ -24,10 +24,6 @@ jobs:
       with:
         python-version: '3.11'
     
-    - name: Create .env file from secret
-      run: |
-        echo "${{ secrets.ENV }}" > src/.env
-    
     - name: Install dependencies
       working-directory: src
       run: |
@@ -45,14 +41,14 @@ jobs:
     
     - name: Run Inventory Agent Initializer
       working-directory: src/app/agents
-      run: |
-        python inventoryAgent_initializer.py
       env:
         AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
         AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
         AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    
-    - name: Cleanup
-      if: always()
+        AZURE_AI_AGENT_ENDPOINT: ${{ secrets.AZURE_AI_AGENT_ENDPOINT }}
+        AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME: ${{ secrets.AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME }}
+        inventory_agent: ${{ secrets.INVENTORY_AGENT_ID }}
+        KUSTO_CLUSTER: ${{ secrets.KUSTO_CLUSTER }}
+        KUSTO_DATABASE: ${{ secrets.KUSTO_DATABASE }}
       run: |
-        rm -f src/.env
+        python inventoryAgent_initializer.py

@@ -23,10 +23,6 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: Create .env file from secret
-        run: |
-          echo "${{ secrets.ENV }}" > src/.env
-
       - name: Install dependencies
         working-directory: src
         run: |
@@ -40,12 +36,15 @@ jobs:
 
       - name: Update Shopper Agent
         working-directory: src
-        run: |
-          python app/agents/shopperAgent_initializer.py
         env:
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_AI_AGENT_ENDPOINT: ${{ secrets.AZURE_AI_AGENT_ENDPOINT }}
+          AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME: ${{ secrets.AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME }}
+          shopper_agent: ${{ secrets.SHOPPER_AGENT_ID }}
+        run: |
+          python app/agents/shopperAgent_initializer.py
 
       - name: Azure Logout
         if: always()

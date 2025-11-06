@@ -43,11 +43,6 @@ jobs:
           pip install -r src/requirements.txt
         working-directory: ${{ github.workspace }}
 
-      - name: Create .env file from secret
-        run: |
-          echo "${{ secrets.ENV }}" > src/.env
-          echo "✅ .env file created successfully"
-
       - name: Azure Login
         uses: azure/login@v2
         with:
@@ -58,6 +53,14 @@ jobs:
       - name: Execute Interior Design Agent Initializer
         run: python src/app/agents/interiorDesignAgent_initializer.py
         working-directory: ${{ github.workspace }}
+        env:
+          AZURE_AI_AGENT_ENDPOINT: ${{ secrets.AZURE_AI_AGENT_ENDPOINT }}
+          AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME: ${{ secrets.AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME }}
+          interior_designer: ${{ secrets.INTERIOR_DESIGNER_AGENT_ID }}
+          subscription_key: ${{ secrets.SUBSCRIPTION_KEY }}
+          blob_connection_string: ${{ secrets.BLOB_CONNECTION_STRING }}
+          storage_account_name: ${{ secrets.STORAGE_ACCOUNT_NAME }}
+          storage_container_name: ${{ secrets.STORAGE_CONTAINER_NAME }}
 
       - name: Summary
         if: success()
