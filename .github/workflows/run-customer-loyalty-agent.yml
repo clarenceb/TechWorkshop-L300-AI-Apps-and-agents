@@ -50,10 +50,6 @@ jobs:
           AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
           gpt_deployment: ${{ secrets.GPT_DEPLOYMENT }}
           AZURE_OPENAI_KEY: ${{ secrets.AZURE_OPENAI_KEY }}
-          sql_server: ${{ secrets.SQL_SERVER }}
-          sql_database: ${{ secrets.SQL_DATABASE }}
-          sql_username: ${{ secrets.SQL_USERNAME }}
-          sql_password: ${{ secrets.SQL_PASSWORD }}
         run: |
           python customerLoyaltyAgent_initializer.py
       

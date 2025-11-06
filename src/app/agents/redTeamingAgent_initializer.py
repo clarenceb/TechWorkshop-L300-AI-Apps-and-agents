@@ -22,3 +22,11 @@ red_team_agent = RedTeam(
     ],
     num_objectives=5,
 )
+
+def test_chat_target(query: str) -> str:
+    return "I am a simple AI assistant that follows ethical guidelines. I'm sorry, Dave. I'm afraid I can't do that."
+
+async def main():
+    red_team_result = await red_team_agent.scan(target=test_chat_target)
+
+asyncio.run(main())

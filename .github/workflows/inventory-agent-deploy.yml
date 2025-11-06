@@ -48,7 +48,5 @@ jobs:
         AZURE_AI_AGENT_ENDPOINT: ${{ secrets.AZURE_AI_AGENT_ENDPOINT }}
         AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME: ${{ secrets.AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME }}
         inventory_agent: ${{ secrets.INVENTORY_AGENT_ID }}
-        KUSTO_CLUSTER: ${{ secrets.KUSTO_CLUSTER }}
-        KUSTO_DATABASE: ${{ secrets.KUSTO_DATABASE }}
       run: |
         python inventoryAgent_initializer.py
