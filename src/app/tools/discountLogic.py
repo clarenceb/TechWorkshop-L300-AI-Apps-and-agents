@@ -9,7 +9,11 @@ from azure.identity import ClientSecretCredential
 import base64
 from openai import AzureOpenAI
 from dotenv import load_dotenv
-load_dotenv()
+
+# Load .env file from the src directory (go up 2 levels from tools)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.dirname(os.path.dirname(current_dir))
+load_dotenv(os.path.join(src_dir, '.env'))
 
 from opentelemetry import trace
 from azure.monitor.opentelemetry import configure_azure_monitor

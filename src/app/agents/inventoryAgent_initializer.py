@@ -2,7 +2,11 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dotenv import load_dotenv
-load_dotenv()
+
+# Load .env file from the src directory (3 levels up from src/app/agents)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+src_dir = os.path.dirname(os.path.dirname(current_dir))
+load_dotenv(os.path.join(src_dir, '.env'))
 
 from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
