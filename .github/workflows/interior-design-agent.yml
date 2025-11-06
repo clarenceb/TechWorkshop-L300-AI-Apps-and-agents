@@ -1,0 +1,66 @@
+name: Interior Design Agent Update
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/app/agents/interiorDesignAgent_initializer.py'
+      - 'src/prompts/InteriorDesignAgentPrompt.txt'
+      - 'src/app/tools/imageCreationTool.py'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/app/agents/interiorDesignAgent_initializer.py'
+      - 'src/prompts/InteriorDesignAgentPrompt.txt'
+      - 'src/app/tools/imageCreationTool.py'
+      - '.github/workflows/interior-design-agent.yml'
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  id-token: write  # Required for Azure federated identity authentication
+  contents: read
+
+jobs:
+  update-agent:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: 'src/requirements.txt'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r src/requirements.txt
+        working-directory: ${{ github.workspace }}
+
+      - name: Create .env file from secret
+        run: |
+          echo "${{ secrets.ENV }}" > src/.env
+          echo "✅ .env file created successfully"
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Execute Interior Design Agent Initializer
+        run: python src/app/agents/interiorDesignAgent_initializer.py
+        working-directory: ${{ github.workspace }}
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "✅ Interior Design Agent successfully updated!" >> $GITHUB_STEP_SUMMARY
+          echo "- Triggered by changes to monitored files" >> $GITHUB_STEP_SUMMARY

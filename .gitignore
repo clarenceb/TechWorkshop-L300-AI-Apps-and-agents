@@ -61,3 +61,4 @@ out/
 # Other
 NOTES.md
 .venv
+*-sp.json

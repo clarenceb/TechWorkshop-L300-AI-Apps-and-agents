@@ -1,0 +1,53 @@
+name: Update Shopper Agent (Cora)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/app/agents/shopperAgent_initializer.py'
+      - 'src/prompts/ShopperAgentPrompt.txt'
+  workflow_dispatch:
+
+jobs:
+  update-agent:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Create .env file from secret
+        run: |
+          echo "${{ secrets.ENV }}" > src/.env
+
+      - name: Install dependencies
+        working-directory: src
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Update Shopper Agent
+        working-directory: src
+        run: |
+          python app/agents/shopperAgent_initializer.py
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Azure Logout
+        if: always()
+        run: |
+          az logout
