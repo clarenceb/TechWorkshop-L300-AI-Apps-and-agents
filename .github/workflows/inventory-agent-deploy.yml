@@ -1,4 +1,4 @@
-name: Deploy Inventory Agent
+name: Update - Inventory Agent
 
 on:
   push:

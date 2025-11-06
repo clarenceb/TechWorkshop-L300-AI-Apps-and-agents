@@ -1,4 +1,4 @@
-name: Run Customer Loyalty Agent Initializer
+name: Update - Customer Loyalty Agent
 
 on:
   push:
